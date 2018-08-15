@@ -1,6 +1,4 @@
-define(function(){
-    return{
-        trackView : function(){},
-        sendEvent : function(){}
-    }
-});
+export default {
+  trackView: function() {},
+  sendEvent: function() {},
+};

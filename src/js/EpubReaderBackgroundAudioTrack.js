@@ -1,79 +1,68 @@
+import $ from 'jquery';
+import Keyboard from './Keyboard';
 
-define(['module','jquery', 'bootstrap', 'readium_js/Readium', './Spinner', 'Settings', 'i18nStrings', './Dialogs', './Keyboard'], 
-        function (module, $, bootstrap, Readium, spinner, Settings, Strings, Dialogs, Keyboard) {
+var init = function(readium) {
+  if (!readium.reader.backgroundAudioTrackManager) return; // safety (out-of-date readium-shared-js?)
 
-    var init = function(readium) {
+  var $audioTrackDiv = $('#backgroundAudioTrack-div');
 
-        if (!readium.reader.backgroundAudioTrackManager) return; // safety (out-of-date readium-shared-js?)
+  var $playAudioTrackBtn = $('#backgroundAudioTrack-button-play');
+  var $pauseAudioTrackBtn = $('#backgroundAudioTrack-button-pause');
 
-        var $audioTrackDiv = $("#backgroundAudioTrack-div");
+  readium.reader.backgroundAudioTrackManager.setCallback_PlayPause(function(doPlay) {
+    if (doPlay) {
+      $audioTrackDiv.addClass('isPlaying');
 
-        var $playAudioTrackBtn = $("#backgroundAudioTrack-button-play");
-        var $pauseAudioTrackBtn = $("#backgroundAudioTrack-button-pause");
+      $playAudioTrackBtn.removeAttr('accesskey');
+      $pauseAudioTrackBtn.attr('accesskey', Keyboard.BackgroundAudioPlayPause);
+    } else {
+      $audioTrackDiv.removeClass('isPlaying');
 
-        readium.reader.backgroundAudioTrackManager.setCallback_PlayPause(function(doPlay)
-            {
-                if (doPlay)
-                {
-                    $audioTrackDiv.addClass('isPlaying');
+      $pauseAudioTrackBtn.removeAttr('accesskey');
+      $playAudioTrackBtn.attr('accesskey', Keyboard.BackgroundAudioPlayPause);
+    }
+  });
 
-                    $playAudioTrackBtn.removeAttr("accesskey");
-                    $pauseAudioTrackBtn.attr("accesskey", Keyboard.BackgroundAudioPlayPause);
-                }
-                else
-                {
-                    $audioTrackDiv.removeClass('isPlaying');
+  readium.reader.backgroundAudioTrackManager.setCallback_IsAvailable(function(yes) {
+    if (yes) {
+      $audioTrackDiv.removeClass('none');
+    } else {
+      $audioTrackDiv.addClass('none');
+    }
+  });
 
-                    $pauseAudioTrackBtn.removeAttr("accesskey");
-                    $playAudioTrackBtn.attr("accesskey", Keyboard.BackgroundAudioPlayPause);
-                }
-            }
-        );
+  Keyboard.on(Keyboard.BackgroundAudioPlayPause, 'reader', function() {
+    var play = !$audioTrackDiv.hasClass('isPlaying');
 
-        readium.reader.backgroundAudioTrackManager.setCallback_IsAvailable(function(yes)
-            {
-                if (yes)
-                {
-                    $audioTrackDiv.removeClass("none");
-                }
-                else
-                {
-                    $audioTrackDiv.addClass("none");
-                }
-            }
-        );
+    readium.reader.backgroundAudioTrackManager.setPlayState(play);
+    readium.reader.backgroundAudioTrackManager.playPause(play);
+  });
 
+  $playAudioTrackBtn.on('click', function() {
+    var wasFocused = document.activeElement === $playAudioTrackBtn[0];
 
-        Keyboard.on(Keyboard.BackgroundAudioPlayPause, 'reader', function()
-        {
-            var play = !$audioTrackDiv.hasClass('isPlaying');
+    readium.reader.backgroundAudioTrackManager.setPlayState(true);
+    readium.reader.backgroundAudioTrackManager.playPause(true);
 
-            readium.reader.backgroundAudioTrackManager.setPlayState(play);
-            readium.reader.backgroundAudioTrackManager.playPause(play);
-        });
+    if (wasFocused)
+      setTimeout(function() {
+        $pauseAudioTrackBtn[0].focus();
+      }, 50);
+  });
 
-        $playAudioTrackBtn.on("click", function ()
-        {
-            var wasFocused = document.activeElement === $playAudioTrackBtn[0];
+  $pauseAudioTrackBtn.on('click', function() {
+    var wasFocused = document.activeElement === $pauseAudioTrackBtn[0];
 
-            readium.reader.backgroundAudioTrackManager.setPlayState(true);
-            readium.reader.backgroundAudioTrackManager.playPause(true);
+    readium.reader.backgroundAudioTrackManager.setPlayState(false);
+    readium.reader.backgroundAudioTrackManager.playPause(false);
 
-            if (wasFocused) setTimeout(function(){ $pauseAudioTrackBtn[0].focus(); }, 50);
-        });
+    if (wasFocused)
+      setTimeout(function() {
+        $playAudioTrackBtn[0].focus();
+      }, 50);
+  });
+};
 
-        $pauseAudioTrackBtn.on("click", function ()
-        {
-            var wasFocused = document.activeElement === $pauseAudioTrackBtn[0];
-
-            readium.reader.backgroundAudioTrackManager.setPlayState(false);
-            readium.reader.backgroundAudioTrackManager.playPause(false);
-
-            if (wasFocused) setTimeout(function(){ $playAudioTrackBtn[0].focus(); }, 50);
-        });
-    };
-
-    return {
-        init : init
-    };
-});
+export default {
+  init: init,
+};

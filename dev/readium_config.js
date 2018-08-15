@@ -65,12 +65,7 @@ if (typeof getFontFaces != "undefined") { // defined externally
     fontsArray = getFontFaces(HTTPServerRootFolder + "/src/fonts/");
 }
 
-// MUST BE *SINGLE* CALL TO require.config() FOR ALMOND (SINGLE BUNDLE) TO WORK CORRECTLY!!!
-require.config({
-    /* http://requirejs.org/docs/api.html#config-waitSeconds */
-    waitSeconds: 0,
-
-    config : {
+window.__readiumConfig = {
 
         'readium_js_viewer/ModuleConfig' : {
 
@@ -97,5 +92,5 @@ require.config({
 
             'epubReadingSystemUrl': HTTPServerRootFolder + '/src/chrome-app/epubReadingSystem.js'
         }
-    }
-});
+};
+

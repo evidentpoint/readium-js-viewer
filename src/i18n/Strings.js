@@ -11,50 +11,51 @@
 //  used to endorse or promote products derived from this software without specific
 //  prior written permission.
 
-define(['text!readium_js_viewer_i18n/_locales/de/messages.json',
-        'text!readium_js_viewer_i18n/_locales/es/messages.json',
-        'text!readium_js_viewer_i18n/_locales/en_US/messages.json',
-        'text!readium_js_viewer_i18n/_locales/fr/messages.json',
-        'text!readium_js_viewer_i18n/_locales/it/messages.json',
-        'text!readium_js_viewer_i18n/_locales/id/messages.json',
-        'text!readium_js_viewer_i18n/_locales/ja/messages.json',
-        'text!readium_js_viewer_i18n/_locales/ko/messages.json',
-        'text!readium_js_viewer_i18n/_locales/pt_BR/messages.json',
-        'text!readium_js_viewer_i18n/_locales/zh_CN/messages.json',
-        'text!readium_js_viewer_i18n/_locales/zh_TW/messages.json'],
-function(de, es, en_US, fr, it, id, ja, ko, pt_BR, zh_CN, zh_TW){
-    var Strings = {};
+import de from './_locales/de/messages.json';
+import es from './_locales/es/messages.json';
+import en_US from './_locales/en_US/messages.json';
+import fr from './_locales/fr/messages.json';
+import it from './_locales/it/messages.json';
+import id from './_locales/id/messages.json';
+import ja from './_locales/ja/messages.json';
+import ko from './_locales/ko/messages.json';
+import pt_BR from './_locales/pt_BR/messages.json';
+import zh_CN from './_locales/zh_CN/messages.json';
+import zh_TW from './_locales/zh_TW/messages.json';
 
-    Strings['de'] = de;
-    Strings['es'] = es;
-    Strings['en_US'] = en_US;
-    Strings['fr'] = fr;
-    Strings['id'] = id;
-    Strings['it'] = it;
-    Strings['ja'] = ja;
-    Strings['ko'] = ko;
-    Strings['pt_BR'] = pt_BR;
-    Strings['zh_CN'] = zh_CN;
-    Strings['zh_TW'] = zh_TW;
+var Strings = {};
 
-    var language = navigator.userLanguage || navigator.language;
+Strings['de'] = de;
+Strings['es'] = es;
+Strings['en_US'] = en_US;
+Strings['fr'] = fr;
+Strings['id'] = id;
+Strings['it'] = it;
+Strings['ja'] = ja;
+Strings['ko'] = ko;
+Strings['pt_BR'] = pt_BR;
+Strings['zh_CN'] = zh_CN;
+Strings['zh_TW'] = zh_TW;
+
+var language = navigator.userLanguage || navigator.language;
 //FORCE HERE (for testing)
 //language="es";
-    console.log("Language: [" + language + "]");
+console.log('Language: [' + language + ']');
 
-    var allowEnglishFallback = true;
+var allowEnglishFallback = true;
 
-    var i18nStr = Strings[language] || en_US;
+var i18nObj = Strings[language] || en_US;
+var i18nObj_en = i18nObj === en_US ? i18nObj : en_US;
 
-    var i18nObj = JSON.parse(i18nStr);
-    var i18nObj_en = i18nStr === en_US ? i18nObj : JSON.parse(en_US);
+for (var prop in i18nObj_en) {
+  var okay = prop in i18nObj;
+  if (!okay) console.log('Language [' + language + '], missing string: [' + prop + ']');
 
-    for(var prop in i18nObj_en){
-        var okay = prop in i18nObj;
-        if (!okay) console.log("Language [" + language + "], missing string: [" + prop + "]");
+  i18nObj[prop] = okay
+    ? i18nObj[prop].message
+    : allowEnglishFallback
+      ? '*' + i18nObj_en[prop].message
+      : '';
+}
 
-        i18nObj[prop] = okay ? i18nObj[prop].message : (allowEnglishFallback ? ("*"+i18nObj_en[prop].message) : "");
-    }
-    return i18nObj;
-
-});
+export default i18nObj;

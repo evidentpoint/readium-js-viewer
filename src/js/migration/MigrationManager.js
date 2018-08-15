@@ -1,8 +1,5 @@
-define(function(){
-
-    return{
-        checkIfNeedsMigration : function(callback){
-            callback(false);
-        }
-    }
-});
+export default {
+  checkIfNeedsMigration: function(callback) {
+    callback(false);
+  },
+};

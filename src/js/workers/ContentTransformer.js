@@ -11,65 +11,63 @@
 //  used to endorse or promote products derived from this software without specific
 //  prior written permission.
 
-define(['../ModuleConfig', 'readium_js/epub-fetch/encryption_handler'], function(moduleConfig, EncryptionHandler){
+import moduleConfig from '../ModuleConfig';
+import EncryptionHandler from 'readium_js/epub-fetch/encryption_handler';
 
-    var isXhtmlFile = function(name){
-        return name.lastIndexOf('.xhtml') == name.length - ('.xhtml'.length) || name.lastIndexOf('.html') == name.length - ('.html'.length);
+var isXhtmlFile = function(name) {
+  return (
+    name.lastIndexOf('.xhtml') == name.length - '.xhtml'.length ||
+    name.lastIndexOf('.html') == name.length - '.html'.length
+  );
+};
+
+var ContentTransformer = function(encryptionData) {
+  this.encryptionHandler = new EncryptionHandler(encryptionData);
+};
+
+ContentTransformer.prototype = {
+  transformContent: function(name, data, callback) {
+    var decryptionFunction = this.encryptionHandler.getDecryptionFunctionForRelativePath(name);
+    if (decryptionFunction) {
+      try {
+        decryptionFunction(data, callback);
+      } catch (e) {
+        console.error(e);
+        callback(data);
+      }
+    } else if (isXhtmlFile(name)) {
+      var fileReader = new FileReader(),
+        self = this;
+
+      fileReader.onload = function() {
+        var newContent = self._transformXhtml(this.result);
+        callback(new Blob([newContent]));
+      };
+      fileReader.readAsText(data);
+    } else {
+      callback(data);
+    }
+  },
+
+  _transformXhtml: function(contentDocumentHtml) {
+    var mathJaxUrl = moduleConfig.mathJaxUrl,
+      ersUrl = moduleConfig.epubReadingSystemUrl;
+
+    var scripts = '';
+
+    if (ersUrl) {
+      scripts += '<script type="text/javascript" src="' + ersUrl + '"></script>';
     }
 
-    var ContentTransformer = function(encryptionData){
-        this.encryptionHandler = new EncryptionHandler(encryptionData);
+    if (mathJaxUrl && contentDocumentHtml.search(/<(\w+:|)(?=math)/) >= 0) {
+      scripts += '<script type="text/javascript" src="' + mathJaxUrl + '"></script>';
     }
 
-    ContentTransformer.prototype = {
-        transformContent : function(name, data, callback){
+    var mangledContent = scripts
+      ? contentDocumentHtml.replace(/(<head[\s\S]*?>)/, '$1' + scripts)
+      : contentDocumentHtml;
+    return mangledContent;
+  },
+};
 
-            var decryptionFunction = this.encryptionHandler.getDecryptionFunctionForRelativePath(name);
-            if (decryptionFunction){
-                try
-                {
-                    decryptionFunction(data, callback);
-                }
-                catch(e)
-                {
-                    console.error(e);
-                    callback(data);
-                }
-            }
-            else if (isXhtmlFile(name)){
-                var fileReader = new FileReader(),
-                    self = this;
-
-                fileReader.onload = function(){
-                    var newContent = self._transformXhtml(this.result);
-                    callback(new Blob([newContent]));
-                }
-                fileReader.readAsText(data);
-            }
-            else{
-                callback(data);
-            }
-        },
-
-        _transformXhtml : function(contentDocumentHtml){
-
-            var mathJaxUrl = moduleConfig.mathJaxUrl,
-                ersUrl = moduleConfig.epubReadingSystemUrl;
-
-            var scripts = "";
-
-            if (ersUrl){
-                scripts += "<script type=\"text/javascript\" src=\"" + ersUrl + "\"><\/script>";
-            }
-
-            if (mathJaxUrl && contentDocumentHtml.search(/<(\w+:|)(?=math)/) >= 0) {
-                scripts += "<script type=\"text/javascript\" src=\"" + mathJaxUrl + "\"><\/script>";
-            }
-
-            var mangledContent = scripts ? contentDocumentHtml.replace(/(<head[\s\S]*?>)/, "$1" + scripts) : contentDocumentHtml;
-            return mangledContent;
-        }
-    }
-
-    return ContentTransformer;
-});
+export default ContentTransformer;
