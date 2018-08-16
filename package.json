@@ -46,7 +46,7 @@
   ],
   "dependencies": {
     "@evidentpoint/readium-shared-js": "^1.0.0-alpha",
-    "@evidentpoint/readium-js": "0.31.0-alpha",
+    "@evidentpoint/readium-js": "^0.31.1-alpha",
     "keymaster": "github:danielweck/keymaster#master",
     "jath": "github:danielweck/jath#master",
     "mathjax-single-file": "github:danielweck/MathJax-single-file#master",
