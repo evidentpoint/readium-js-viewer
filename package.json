@@ -5,7 +5,7 @@
   "._": "as this would overwrite / update the JSON, not the master CSON!",
   "*/": "----------------------------------------------------------------------------",
   "name": "readium-js-viewer",
-  "version": "0.31.0-alpha",
+  "version": "1.0.0-alpha.1",
   "engines": {
     "node": ">=4",
     "npm": ">=2",
@@ -39,14 +39,13 @@
     "url": "git://github.com/readium/readium-js-viewer.git"
   },
   "files": [
-    "dev/",
     "dist/",
     "license.txt",
     "README.md"
   ],
   "dependencies": {
-    "@evidentpoint/readium-shared-js": "^1.0.0-alpha",
-    "@evidentpoint/readium-js": "^0.31.1-alpha",
+    "@evidentpoint/readium-shared-js": "^1.0.0-alpha.1",
+    "@evidentpoint/readium-js": "^1.0.0-alpha.1",
     "keymaster": "github:danielweck/keymaster#master",
     "jath": "github:danielweck/jath#master",
     "mathjax-single-file": "github:danielweck/MathJax-single-file#master",
@@ -57,11 +56,18 @@
     "screenfull": "^3.3.2",
     "remotestoragejs": "^1.0.1",
     "spin.js": "^2.3.2",
-    "urijs": "^1.19.1"
+    "urijs": "^1.19.1",
+    "zip-js": "github:danielweck/zip.js#master"
   },
   "devDependencies": {
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "mini-css-extract-plugin": "^0.4.1",
     "mustache-loader": "^1.4.1",
+    "html-loader": "^0.5.5",
     "prettier": "^1.13.7",
+    "style-loader": "^0.22.1",
+    "url-loader": "^1.1.0",
     "webpack": "^4.16.2",
     "webpack-command": "^0.4.1",
     "webpack-dev-server": "^3.1.5"

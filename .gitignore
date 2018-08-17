@@ -1,13 +1,11 @@
 .history
-api-docs
-build-output
-dist
-.idea
 .DS_Store
 .divshot-cache
+.idea
 node_modules
 .surgeignore
-epub_content/x
+epubs
+dist
 build.txt
 npm-debug.log
 http.log
