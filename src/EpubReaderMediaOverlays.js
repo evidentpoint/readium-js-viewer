@@ -1,4 +1,4 @@
-import {Globals} from '@evidentpoint/readium-shared-js';
+import { Globals } from '@evidentpoint/readium-shared-js';
 import $ from 'jquery';
 import _ from 'underscore';
 import Settings from './storage/Settings';

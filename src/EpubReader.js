@@ -1,4 +1,10 @@
-import { Globals, globalsSetup, Helpers, BookmarkData, epubReadingSystemObject } from '@evidentpoint/readium-shared-js';
+import {
+  Globals,
+  globalsSetup,
+  Helpers,
+  BookmarkData,
+  epubReadingSystemObject,
+} from '@evidentpoint/readium-shared-js';
 import { Readium } from '@evidentpoint/readium-js';
 import moduleConfig from './ModuleConfig';
 import $ from 'jquery';
@@ -1334,20 +1340,19 @@ var initReadium = function() {
           cfiJs: version.readiumCfiJs,
         }),
       );
-      window.navigator.epubReadingSystem = window.navigator.epubReadingSystem || epubReadingSystemObject;
+      window.navigator.epubReadingSystem =
+        window.navigator.epubReadingSystem || epubReadingSystemObject;
       window.navigator.epubReadingSystem.name = 'readium-js-viewer';
       // window.navigator.epubReadingSystem.version = version.readiumJsViewer.chromeVersion;
-      window.navigator.epubReadingSystem.version = "1.0.0";
+      window.navigator.epubReadingSystem.version = '1.0.0';
 
       window.navigator.epubReadingSystem.readium = {};
 
       window.navigator.epubReadingSystem.readium.buildInfo = {};
 
       window.navigator.epubReadingSystem.readium.buildInfo.dateTime = version.dateTimeString; //new Date(timestamp).toString();
-      window.navigator.epubReadingSystem.readium.buildInfo.version =
-        "1.0.0";
-      window.navigator.epubReadingSystem.readium.buildInfo.chromeVersion =
-        '1.0.0';
+      window.navigator.epubReadingSystem.readium.buildInfo.version = '1.0.0';
+      window.navigator.epubReadingSystem.readium.buildInfo.chromeVersion = '1.0.0';
 
       window.navigator.epubReadingSystem.readium.buildInfo.gitRepositories = [];
 

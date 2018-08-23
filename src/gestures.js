@@ -11,7 +11,7 @@
 //  used to endorse or promote products derived from this software without specific
 //  prior written permission.
 
-import {Globals } from '@evidentpoint/readium-shared-js';
+import { Globals } from '@evidentpoint/readium-shared-js';
 import $ from 'jquery';
 import jqueryHammer from 'jquery-hammerjs';
 import Hammer from 'hammerjs';

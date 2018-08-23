@@ -2,7 +2,6 @@
 * ModuleConfig.js: Module that contains configuration options for Readium-js-viewer.
 */
 
-
 var config = window.__readiumConfig || {};
 export default {
   imagePathPrefix: config.imagePathPrefix || '',
