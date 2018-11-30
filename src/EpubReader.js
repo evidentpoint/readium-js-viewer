@@ -5,7 +5,7 @@ import {
   BookmarkData,
   epubReadingSystemObject,
 } from '@evidentpoint/readium-shared-js';
-import { Readium } from '@evidentpoint/readium-js';
+import { Readium } from "readium-ng-r1-compat";
 import moduleConfig from './ModuleConfig';
 import $ from 'jquery';
 import 'bootstrap';
