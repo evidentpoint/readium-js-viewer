@@ -75,7 +75,6 @@ iframe {
     position: absolute !important;
     opacity: 1;
     visibility: visible;
-    overflow: hidden;
 }
 
 /*fixed layout frames only*/
